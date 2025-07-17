@@ -5,11 +5,10 @@ require ("andwherePDO.class.php");
 include ("scripts.php");
 
 if (DEBUG === true) {
-  error_reporting(E_WARN);
-  ini_set("display_errors", true);
-
+    error_reporting(E_WARNING);
+    ini_set("display_errors", true);
     var_dump($_REQUEST);
-        print "<p></p>".PHP_EOL;
+    print "<p></p>".PHP_EOL;
 }
 
 if (isset($_REQUEST['set_init'])) {
@@ -99,6 +98,10 @@ if (! $installation_problem) {
 
 $offset = (isset($_REQUEST['offset']) ? $_REQUEST['offset'] : 0);
 
+// Initialize optional query helpers to prevent undefined-variable notices
+$and_where = null;
+$hour_focus = isset($_REQUEST['hour_focus']) ? $_REQUEST['hour_focus'] : "";
+
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == "move_session") {
     MoveSession($_REQUEST['session_id'], $_REQUEST['transaction_id'], $_REQUEST['time_shift']);
     print '<hr>';
@@ -107,7 +110,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == "delete_session") {
     DeleteUndelete("delete",$_REQUEST['session_id']);
     print '<hr>';
 }
-elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == "undelete_session") {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == "undelete_session") {
     DeleteUndelete("undelete",$_REQUEST['session_id']);
     print '<hr>';
 }
